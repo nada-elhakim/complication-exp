@@ -18,7 +18,6 @@
 		AD485E3D237A127B00AB5C2E /* complications WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = AD485E3C237A127B00AB5C2E /* complications WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AD485E42237A127B00AB5C2E /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD485E41237A127B00AB5C2E /* InterfaceController.swift */; };
 		AD485E44237A127B00AB5C2E /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD485E43237A127B00AB5C2E /* ExtensionDelegate.swift */; };
-		AD485E46237A127B00AB5C2E /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD485E45237A127B00AB5C2E /* NotificationController.swift */; };
 		AD485E48237A127B00AB5C2E /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD485E47237A127B00AB5C2E /* ComplicationController.swift */; };
 		AD485E4A237A127B00AB5C2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD485E49237A127B00AB5C2E /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -80,11 +79,9 @@
 		AD485E3C237A127B00AB5C2E /* complications WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "complications WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD485E41237A127B00AB5C2E /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
 		AD485E43237A127B00AB5C2E /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
-		AD485E45237A127B00AB5C2E /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
 		AD485E47237A127B00AB5C2E /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
 		AD485E49237A127B00AB5C2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AD485E4B237A127B00AB5C2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AD485E4C237A127C00AB5C2E /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
 		AD485E5A237A129C00AB5C2E /* complications.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = complications.entitlements; sourceTree = "<group>"; };
 		AD485E5B237A132000AB5C2E /* complications WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "complications WatchKit Extension.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -157,11 +154,9 @@
 				AD485E5B237A132000AB5C2E /* complications WatchKit Extension.entitlements */,
 				AD485E41237A127B00AB5C2E /* InterfaceController.swift */,
 				AD485E43237A127B00AB5C2E /* ExtensionDelegate.swift */,
-				AD485E45237A127B00AB5C2E /* NotificationController.swift */,
 				AD485E47237A127B00AB5C2E /* ComplicationController.swift */,
 				AD485E49237A127B00AB5C2E /* Assets.xcassets */,
 				AD485E4B237A127B00AB5C2E /* Info.plist */,
-				AD485E4C237A127C00AB5C2E /* PushNotificationPayload.apns */,
 			);
 			path = "complications WatchKit Extension";
 			sourceTree = "<group>";
@@ -235,6 +230,9 @@
 					AD485E1A237A127A00AB5C2E = {
 						CreatedOnToolsVersion = 10.3;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -246,6 +244,9 @@
 					AD485E3B237A127B00AB5C2E = {
 						CreatedOnToolsVersion = 10.3;
 						SystemCapabilities = {
+							com.apple.BackgroundModes.watchos.extension = {
+								enabled = 0;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -317,7 +318,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD485E46237A127B00AB5C2E /* NotificationController.swift in Sources */,
 				AD485E48237A127B00AB5C2E /* ComplicationController.swift in Sources */,
 				AD485E44237A127B00AB5C2E /* ExtensionDelegate.swift in Sources */,
 				AD485E42237A127B00AB5C2E /* InterfaceController.swift in Sources */,
@@ -488,22 +488,23 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "complications WatchKit Extension/complications WatchKit Extension.entitlements";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = KAZW24L6HU;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = X792X9FPG9;
 				INFOPLIST_FILE = "complications WatchKit Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.savrlabs.experiments.complications.watchkitapp.watchkitextension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.goklue.exp.complications.watchkit.extension;
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE_SPECIFIER = "Complications Experiment App";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 5.3;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
 			};
 			name = Debug;
 		};
@@ -512,22 +513,23 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "complications WatchKit Extension/complications WatchKit Extension.entitlements";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = X792X9FPG9;
 				INFOPLIST_FILE = "complications WatchKit Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.savrlabs.experiments.complications.watchkitapp.watchkitextension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.goklue.exp.complications.watchkit.extension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 5.3;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
 			};
 			name = Release;
 		};
@@ -536,18 +538,19 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = KAZW24L6HU;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = X792X9FPG9;
 				IBSC_MODULE = complications_WatchKit_Extension;
 				INFOPLIST_FILE = "complications WatchKit App/Info.plist";
-				PRODUCT_BUNDLE_IDENTIFIER = com.savrlabs.experiments.complications.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.goklue.exp.complications.watchkit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Complications Experiment App";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 5.3;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
 			};
 			name = Debug;
 		};
@@ -556,18 +559,19 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = X792X9FPG9;
 				IBSC_MODULE = complications_WatchKit_Extension;
 				INFOPLIST_FILE = "complications WatchKit App/Info.plist";
-				PRODUCT_BUNDLE_IDENTIFIER = com.savrlabs.experiments.complications.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.goklue.exp.complications.watchkit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 5.3;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
 			};
 			name = Release;
 		};
@@ -575,17 +579,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = complications/complications.entitlements;
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = KAZW24L6HU;
+				CODE_SIGN_ENTITLEMENTS = complications/complicationsDebug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = X792X9FPG9;
 				INFOPLIST_FILE = complications/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.savrlabs.experiments.complications;
+				PRODUCT_BUNDLE_IDENTIFIER = com.goklue.exp.complications;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Complications Experiment App";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -596,14 +601,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = complications/complications.entitlements;
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = X792X9FPG9;
 				INFOPLIST_FILE = complications/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.savrlabs.experiments.complications;
+				PRODUCT_BUNDLE_IDENTIFIER = com.goklue.exp.complications;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

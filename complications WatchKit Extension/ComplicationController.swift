@@ -1,92 +1,78 @@
 //
 //  ComplicationController.swift
-//  complications WatchKit Extension
+//  Watch Extension
 //
-//  Created by Nada ElHakim on 11/12/19.
-//  Copyright © 2019 Nada ElHakim. All rights reserved.
+//  Created by Harry Eakins on 12/11/19.
+//  Copyright © 2019 The Chromium Authors. All rights reserved.
 //
 
 import ClockKit
-import WatchKit
-
-import ClockKit
-import WatchKit
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
-    let userDefaults = UserDefaults.standard
-    
-    // MARK: - Timeline Configuration
-    func getPlaceholderTemplate(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTemplate?) -> Void) {
-        let update = userDefaults.integer(forKey: "update")
-        
-        switch complication.family {
-        case .modularLarge:
-            let template = CLKComplicationTemplateModularLargeStandardBody()
-            template.headerTextProvider = CLKSimpleTextProvider(text: "Klue")
-            template.body1TextProvider = CLKSimpleTextProvider(text: "Updates")
-            template.body2TextProvider = CLKSimpleTextProvider(text: "\(update)")
-            handler(template)
-        default:
-            let template = CLKComplicationTemplateModularSmallStackText()
-            template.line1TextProvider = CLKSimpleTextProvider(text: "Updates")
-            template.line2TextProvider = CLKSimpleTextProvider(text: "\(update)")
-            handler(template)
-        }
-    }
-    
+    static var counter: Int = 0
+
     func getSupportedTimeTravelDirections(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimeTravelDirections) -> Void) {
-        handler([.forward, .backward])
+        // We support neither forward nor backward time travel
+        handler([])
     }
-    
-    func getTimelineStartDate(for complication: CLKComplication, withHandler handler: @escaping (Date?) -> Void) {
-        handler(Date())
-    }
-    
-    func getTimelineEndDate(for complication: CLKComplication, withHandler handler: @escaping (Date?) -> Void) {
-        handler(nil)
-    }
-    
-    func getPrivacyBehavior(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationPrivacyBehavior) -> Void) {
-        handler(.showOnLockScreen)
-    }
-    
-    // MARK: - Timeline Population
-    
+
     func getCurrentTimelineEntry(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void) {
-        let update = userDefaults.integer(forKey: "update")
-        var entry: CLKComplicationTimelineEntry
-        
         switch complication.family {
+        case .graphicRectangular:
+            let template = CLKComplicationTemplateGraphicRectangularTextGauge()
+            template.headerTextProvider = CLKSimpleTextProvider(text: "Complication updates")
+            template.gaugeProvider = CLKSimpleGaugeProvider(
+                style: .fill,
+                gaugeColor: .yellow,
+                fillFraction: (Float(Self.counter)/10).truncatingRemainder(dividingBy: 1.0))
+            template.body1TextProvider = CLKSimpleTextProvider(text: "Counter: \(Self.counter)")
+            handler(CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template))
+            
+        case .modularSmall:
+            let template = CLKComplicationTemplateModularSmallRingText()
+            template.textProvider = CLKSimpleTextProvider(text: "\(Self.counter)")
+            template.fillFraction = (Float(Self.counter)/10).truncatingRemainder(dividingBy: 1.0)
+            handler(CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template))
+            
         case .modularLarge:
-            let template = CLKComplicationTemplateModularLargeStandardBody()
-            template.headerTextProvider = CLKSimpleTextProvider(text: "Klue")
-            template.body1TextProvider = CLKSimpleTextProvider(text: "Updates")
-            template.body2TextProvider = CLKSimpleTextProvider(text:  "\(update)")
-            entry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
+            let template = CLKComplicationTemplateModularLargeTallBody()
+            template.headerTextProvider = CLKTextProvider.init(format: "Complication updates")
+            template.bodyTextProvider = CLKSimpleTextProvider(text: "\(Self.counter)")
+            handler(CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template))
+            
         default:
-            let template = CLKComplicationTemplateModularSmallStackText()
-            template.line1TextProvider = CLKSimpleTextProvider(text: "Update")
-            template.line2TextProvider = CLKSimpleTextProvider(text:  "\(update)")
-            entry = CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
+            handler(nil)
         }
-        
-        handler(entry)
     }
-    
-    func getTimelineEntries(for complication: CLKComplication, before date: Date, limit: Int, withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void) {
-        // Call the handler with the timeline entries prior to the given date
-        handler(nil)
-    }
-    
-    func getTimelineEntries(for complication: CLKComplication, after date: Date, limit: Int, withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void) {
-        // Call the handler with the timeline entries after to the given date
-        handler(nil)
-    }
-    
-    // MARK: - Placeholder Templates
-    
-    func getLocalizableSampleTemplate(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTemplate?) -> Void) {
-        // This method will be called once per supported complication, and the results will be cached
-        handler(nil)
+}
+
+extension CLKComplicationFamily {
+    func stringValue() -> String {
+        switch self {
+        case .modularSmall:
+            return "modularSmall"
+        case .modularLarge:
+            return "modularLarge"
+        case .utilitarianSmall:
+            return "utilitarianSmall"
+        case .utilitarianSmallFlat:
+            return "utilitarianSmallFlat"
+        case .utilitarianLarge:
+            return "utilitarianLarge"
+        case .circularSmall:
+            return "circularSmall"
+        case .extraLarge:
+            return "extraLarge"
+        case .graphicCorner:
+            return "graphicCorner"
+        case .graphicBezel:
+            return "graphicBezel"
+        case .graphicCircular:
+            return "graphicCircular"
+        case .graphicRectangular:
+            return "graphicRectangular"
+        @unknown default:
+            return "unknown"
+        }
     }
 }

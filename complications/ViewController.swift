@@ -11,12 +11,16 @@ import WatchConnectivity
 
 class ViewController: UIViewController, WCSessionDelegate {
     var session: WCSession!
+    let userDefaults = UserDefaults.standard
     
     @IBAction func updateComplication(_ sender: Any) {
         // update complication
         if session.isWatchAppInstalled {
             print("Remaining session transfers: \(session.remainingComplicationUserInfoTransfers)")
-            session.transferCurrentComplicationUserInfo(["update": true])
+            let update = userDefaults.integer(forKey: "update")
+            userDefaults.set(update + 1, forKey: "update")
+            
+            session.transferCurrentComplicationUserInfo(["update": update])
         }
     }
     

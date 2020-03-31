@@ -90,15 +90,14 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, PKPushRegistryDelegate, 
         updateComplication()
     }
     
+    func pushRegistry(_ registry: PKPushRegistry, didInvalidatePushTokenFor type: PKPushType) {
+        print("Token invalid")
+    }
+    
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
     }
 
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
-        updateComplication()
-    }
-    
-    func didReceiveRemoteNotification(_ userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (WKBackgroundFetchResult) -> Void) {
-        print("Received push from pushkit")
         updateComplication()
     }
 }
